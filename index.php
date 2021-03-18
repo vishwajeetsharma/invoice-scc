@@ -1,4 +1,8 @@
-<?php require_once 'authController.php'; ?>
+<?php require_once 'authController.php'; 
+if (!isset($_SESSION['password'])) {
+    header('location: login.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,6 +12,7 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="shortcut icon" href="logos.png" type="image/png">
     <style>
         @import url('https://fonts.googleapis.com/css?family=Lora');
 
@@ -27,6 +32,9 @@ form p{
 .form-group{
     margin-top: 25px;
 }
+.logout{
+    float: right;
+}
     </style>
     <title> Register </title>
   </head>
@@ -37,24 +45,33 @@ form p{
 <div class="container">
         <div class="row">
             <div class="col-md-4 offset-md-4 form-div">
+            <h3 class="text-center text-danger"> Welcome <b><?php echo $_SESSION['username'] ?></b></h3>
+            <hr>
+            <?php if(count($errors) > 0): ?>
+                    <div class="alert alert-danger">
+                        <?php foreach($errors as $error): ?>
+                            <li><?php echo $error; ?></li>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endif; ?>
                 <form action="index.php" method="post">
                     <h3 class="text-center"> Generate <b>PDF</b></h3>
-                    <h6><a href="invoice-demo.html">sample</a></h6>
+                    <h6><a href="records.php">Records</a><a href="logout.php" class="logout">Logout</a></h6>
                     <div class="form-group">
                         <label for="name">Name: </label>
-                        <input type="text" name="name" class="form-control form-control-lg" required placeholder="Student's name">
+                        <input type="text" name="name" class="form-control form-control-lg" placeholder="Student's name" value="<?php echo $name ?>">
                     </div>
                     <div class="form-group">
                         <label for="class">Class: </label>
-                        <input type="text" class="form-control form-control-lg" name="class" Required placeholder="Student's class">
+                        <input type="text" class="form-control form-control-lg" name="class" placeholder="Student's class" value="<?php echo $class ?>">
                     </div>
                     <div class="form-group">
                         <label for="date">Date: <i>(date of fee payment)</i> </label>
-                        <input type="Date" name="date" class="form-control form-control-lg" required>
+                        <input type="Date" name="date" class="form-control form-control-lg" value="<?php echo $newDate ?>">
                     </div>
                     <div class="form-group">
                         <label for="month">For-Month: </label>
-                        <select name="month" class="form-select form-control form-control-lg" aria-label="Default select example" required>
+                        <select name="month" class="form-select form-control form-control-lg" aria-label="Default select example">
 						  <option selected disabled>---month---</option>
 						  <option value="January">January</option>
 						  <option value="February">February</option>
@@ -72,7 +89,7 @@ form p{
                     </div>
                     <div class="form-group">
                         <label for="amt">Amount: </label>
-                        <input type="number" class="form-control form-control-lg" name="amt" Required placeholder="Fees paid">
+                        <input type="number" class="form-control form-control-lg" name="amt" placeholder="Fees paid" value="<?php echo $amt ?>">
                     </div>
                     <div class="form-group d-grid gap-2">
                         <button type="submit" class="btn btn-block btn-primary btn-lg" name="Generate-btn"> Generate </button>
