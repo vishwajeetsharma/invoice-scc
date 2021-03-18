@@ -4,11 +4,11 @@ if (!isset($_SESSION['password'])) {
 }
 function fetch_data(){
     $output = "";
-    $connect = mysqli_connect("sql201.epizy.com", "epiz_28067526", "dZNcQBy9jOjwqkO", "epiz_28067526_pdf");
+    $connect = mysqli_connect("localhost", "root", "", "pdf");
     if ($connect->connect_error) {
     	die('Database error ' .$connect->connect_error);
 	}
-    $query = "SELECT * FROM pdf";
+    $query = "SELECT * FROM pdf ORDER BY Id desc";
     $result = mysqli_query($connect, $query);
     $num = mysqli_num_rows($result);
     $num = mysqli_num_rows($result);
@@ -17,6 +17,7 @@ function fetch_data(){
             <tr>
                 <td>'.$row["Id"].'</td>
                 <td>'.$row["Name"].'</td>
+                <td>'.$row["email"].'</td>
                 <td>'.$row["Class"].'</td>
                 <td>'.$row["Date"].'</td>
                 <td>'.$row["For_Month"].'</td>
@@ -42,15 +43,15 @@ function fetch_data(){
    </head>
    <body>
 <br><br>
-<div class="container" style="width: 700px;">
+<div class="container" style="width: 1000px;">
     <h3 align="center"> Records you have added </h3>
     <a href="/" class="btn btn-danger"> Go Back </a><br><br>
     <div class="table-responsive">
-        <table class="table table-bordered>
+        <table class="table ">
             <tr>
-                <th width="">  </th>
                 <th width=""> Id </th>
                 <th width=""> Name </th>
+                <th width=""> Email </th>
                 <th width=""> Class </th>
                 <th width=""> Date </th>
                 <th width=""> Month </th>

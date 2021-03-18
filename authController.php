@@ -2,6 +2,7 @@
 
 session_start();
 $name = '';
+$email = '';
 $class = '';
 $newDate = '';
 $date = '';
@@ -9,10 +10,12 @@ $month = '';
 $amt = '';
 $id = '';
 $errors = array();
+$erroros = array();
 
 // If user clicks on generate button 
 if(isset($_POST['Generate-btn'])){
 	$name = $_POST['name'];
+	$email = $_POST['email'];
 	$class = $_POST['class'];
 	$newDate = $_POST['date'];
     $date = date("d-m-Y", strtotime($newDate));
@@ -26,6 +29,12 @@ if(isset($_POST['Generate-btn'])){
     // empty and correct form validation
     if (empty($name)) {
         $errors['name'] = "Name Required";
+    }
+    if (empty($email)) {
+        $errors['email'] = "Email Required";
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = "Email address is invalid";
     }
     if (empty($class)) {
         $errors['class'] = "Class Required";
@@ -45,7 +54,7 @@ if(isset($_POST['Generate-btn'])){
         if ($conn->connect_error) {
             die('Database error ' .$conn->connect_error);
         }
-        $con = " INSERT INTO pdf (Name, Class, date, For_Month, Amount) values ('$name', '$class', '$date', '$month', '$amt') ";
+        $con = " INSERT INTO pdf (Name, email, Class, date, For_Month, Amount) values ('$name', '$email', '$class', '$date', '$month', '$amt') ";
         mysqli_query($conn, $con);
         
         $sql = " select * from pdf where Name = '$name' && For_Month ='$month' && Class = '$class' ";
@@ -88,7 +97,6 @@ if(isset($_POST['Generate-btn'])){
                     </style>
                 </head>
                 <body style="text:center;">
-                        <img src="logo.png" height="240px" width="auto">
                         <h1> Shukla Commerce Classes </h1>
                     <div class="list">
                         <ul style="list-style-type: none;text-align:center;">
@@ -104,7 +112,7 @@ if(isset($_POST['Generate-btn'])){
                     <tr>
                     <th></th>
                     <th></th>
-                    <th><img src="image.png" width="160px"></th>
+                    <th></th>
                     </tr>
                 </thead>
                 </table>
@@ -148,6 +156,13 @@ if(isset($_POST['Generate-btn'])){
                 </body>
                 </html>
             ';
+        $htmls = '
+                <h1> Dear '.$name.',</h1>
+                <h2> Thank you for your payment </h2>
+                <h2> we have received your ₹'.$amt.'</h2>
+                <h2> Attached PDF with this email is your Invoice </h2>
+                <p><b>Note:</b> This is an auto generated mail from <a href="http://www.shuklacommerceclasses.ml">shuklacommerceclasses.ml</a> by <a href="https://instagram.com/vishwajeet4398"> Vishwajeet Sharma </a> It is clarified that this is an totally legal mail from us you can show this invoice with this mail as your evidence<br>Regards,<br><b>Anurag Shukla</b></p>
+        ';
         require_once('tcpdf/tcpdf.php');
         $tcpdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -180,7 +195,51 @@ if(isset($_POST['Generate-btn'])){
         $tcpdf->writeHTML($html, true, false, false, false, '');
 
         //Close and output PDF document
-        $tcpdf->Output($id.'-'.$name.'-'.$month.'.pdf');
+        // $tcpdf->Output(__DIR__ . $id.'-'.$name.'-'.$month.'.pdf', 'F');
+        $filename= $id.'-'.$name.'-'.$month.'.pdf'; 
+        $filelocation = __dir__."\\invoices";
+        $fileNL = $filelocation."\\".$filename;
+        $tcpdf->Output($fileNL , 'F');
+
+
+
+
+        //  sending mail 
+        require 'PHPMailer/PHPMailerAutoload.php';
+        $mail = new PHPMailer;
+        //$mail->SMTPDebug = 3;                               // Enable verbose debug output
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = 'messagefromscc@gmail.com';                 // SMTP username
+        $mail->Password = 'encrypted';                           // SMTP password
+        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 587;                                    // TCP port to connect to
+
+        $mail->setFrom('messagefromscc@gmail.com', 'SCC - Shukla Comeerce Classes');
+        $mail->addAddress($email, $name);     // Add a recipient
+        // $mail->addAddress('ellen@example.com');               // Name is optional
+        $mail->addReplyTo('messagefromscc@gmail.com', 'Information');
+        // $mail->addCC('cc@example.com');
+        // $mail->addBCC('bcc@example.com');
+
+        $mail->addAttachment($fileNL);         // Add attachments
+        // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+        $mail->isHTML(true);                                  // Set email format to HTML
+
+        $mail->Subject = 'Inoice-'.$id.'-'.$name.'-'.$month;
+        $mail->Body    = $htmls;
+        // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+        if(!$mail->send()) {
+            $errors['mail'] = 'Message could not be sent.';
+            $errors['mail'] = 'Mailer Error: ' . $mail->ErrorInfo;
+        } else {
+            $erroros['mail'] = 'Email has been sent';
+        }
+        if(file_exists($fileNL)) {
+            unlink($fileNL);
+        }
     }
 }
 

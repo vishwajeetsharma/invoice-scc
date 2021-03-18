@@ -54,12 +54,23 @@ form p{
                         <?php endforeach; ?>
                     </div>
                     <?php endif; ?>
+                    <?php if(count($erroros) > 0): ?>
+                    <div class="alert alert-success">
+                        <?php foreach($erroros as $erroro): ?>
+                            <li><?php echo $erroro; ?></li>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endif; ?>
                 <form action="index.php" method="post">
                     <h3 class="text-center"> Generate <b>PDF</b></h3>
                     <h6><a href="records.php">Records</a><a href="logout.php" class="logout">Logout</a></h6>
                     <div class="form-group">
                         <label for="name">Name: </label>
                         <input type="text" name="name" class="form-control form-control-lg" placeholder="Student's name" value="<?php echo $name ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email: </label>
+                        <input type="text" name="email" class="form-control form-control-lg" placeholder="Student's email" value="<?php echo $email ?>">
                     </div>
                     <div class="form-group">
                         <label for="class">Class: </label>
