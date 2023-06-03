@@ -237,9 +237,9 @@ if(isset($_POST['Generate-btn'])){
         } else {
             $erroros['mail'] = 'Email has been sent';
         }
-        // if(file_exists($fileNL)) {
-        //     unlink($fileNL);
-        // }
+        if(file_exists($fileNL)) {
+            unlink($fileNL);
+        }
     }
 }
 
