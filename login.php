@@ -50,10 +50,11 @@ if (isset($_SESSION['password'])) {
             <div class="col-md-4 offset-md-4 form-div">
                 <form action="index.php" method="post">
                     <h3 class="text-center"><b> Login </b></h3>
+                    <p align="center">Use password "1234" to login with any username</p>
                     <div class="form-group">
                         <label for="username">User Name: </label>
                         <input type="text" name="username" class="form-control form-control-lg"
-                            placeholder="Your Username" value="Anurag Shukla">
+                            placeholder="Your random Username" value="">
                     </div>
                     <div class="form-group">
                         <label for="password">Password: </label>

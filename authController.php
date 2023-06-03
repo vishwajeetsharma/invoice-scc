@@ -97,7 +97,7 @@ if(isset($_POST['Generate-btn'])){
                     </style>
                 </head>
                 <body style="text:center;">
-                        <h1> Shukla Commerce Classes </h1>
+                        <h1> Free Invoice Creator </h1>
                     <div class="list">
                         <ul style="list-style-type: none;text-align:center;">
                             <li style="font-size: 45px;"><b>Invoice No. :</b>';$html .=$id;$html .='</li><br><br>
@@ -118,8 +118,8 @@ if(isset($_POST['Generate-btn'])){
                 </table>
 
                             <li style="font-size: 45px;text-align:center;">
-                            <a style="font-size:0.5em" class="small" href="tel:+91 8010604381">+91 80106 04381</a></li><br>
-                            <li style="font-size: 45px;text-align:center;"><a style="font-size:0.5em" class="small" href="mailto:shuklacommerceclasses@gmail.com">shuklacommerceclasses@gmail.com</a></li>
+                            <a style="font-size:0.5em" class="small" href="tel:+917703885027">+917703885027</a></li><br>
+                            <li style="font-size: 45px;text-align:center;"><a style="font-size:0.5em" class="small" href="mailto:vishwajeet@usedbookwala.com">vishwajeet@usedbookwala.com</a></li>
                         </ul>
                     </div>
                     <style>
@@ -159,9 +159,9 @@ if(isset($_POST['Generate-btn'])){
         $htmls = '
                 <h1> Dear '.$name.',</h1>
                 <h2> Thank you for your payment </h2>
-                <h2> we have received your ₹'.$amt.'</h2>
+                <h2> we have received your  rs. '.$amt.'</h2>
                 <h2> Attached PDF with this email is your Invoice </h2>
-                <p><b>Note:</b> This is an auto generated mail from <a href="http://www.shuklacommerceclasses.ml">shuklacommerceclasses.ml</a> by <a href="https://instagram.com/vishwajeet4398"> Vishwajeet Sharma </a> It is clarified that this is an totally legal mail from us you can show this invoice with this mail as your evidence<br>Regards,<br><b>Anurag Shukla</b></p>
+                <p><b>Note:</b> This is an auto generated mail from <a href="https://invoice.vishwajeetsharma.com/">https://invoice.vishwajeetsharma.com/</a> by <a href="https://instagram.com/vishwajeet4398"> Vishwajeet Sharma </a> It is clarified that this is an totally legal mail from us you can show this invoice with this mail as your evidence<br>Regards,<br><b>Invoice Creator</b></p>
         ';
         require_once('tcpdf/tcpdf.php');
         $tcpdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -209,14 +209,14 @@ if(isset($_POST['Generate-btn'])){
         $mail = new PHPMailer;
         //$mail->SMTPDebug = 3;                               // Enable verbose debug output
         $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers
+        $mail->Host = 'smtppro.zoho.in';                       // Specify main and backup SMTP servers
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = 'messagefromscc@gmail.com';                 // SMTP username
-        $mail->Password = 'encrypted';                           // SMTP password
+        $mail->Username = 'vishwajeet@usedbookwala.com';                 // SMTP username
+        $mail->Password = 'hXMj3Z5nsbD4';                           // SMTP password
         $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = 587;                                    // TCP port to connect to
 
-        $mail->setFrom('messagefromscc@gmail.com', 'SCC - Shukla Comeerce Classes');
+        $mail->setFrom('vishwajeet@usedbookwala.com', 'Invoice Creator');
         $mail->addAddress($email, $name);     // Add a recipient
         // $mail->addAddress('ellen@example.com');               // Name is optional
         $mail->addReplyTo('messagefromscc@gmail.com', 'Information');
@@ -237,9 +237,9 @@ if(isset($_POST['Generate-btn'])){
         } else {
             $erroros['mail'] = 'Email has been sent';
         }
-        if(file_exists($fileNL)) {
-            unlink($fileNL);
-        }
+        // if(file_exists($fileNL)) {
+        //     unlink($fileNL);
+        // }
     }
 }
 
